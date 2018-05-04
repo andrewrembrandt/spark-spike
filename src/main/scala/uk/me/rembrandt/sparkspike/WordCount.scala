@@ -1,4 +1,4 @@
-package uk.me.rembrandt.holdenksprktmpl
+package uk.me.rembrandt.sparkspike
 
 /**
  * Everyone's favourite wordcount example.

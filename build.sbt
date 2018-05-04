@@ -29,6 +29,7 @@ lazy val root = (project in file(".")).
     ),
 
     run in Compile := Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run)).evaluated,
+    mainClass in (Compile, run) := Some("uk.me.rembrandt.sparkspike.CountingLocalApp"),
 
     scalacOptions ++= Seq("-deprecation", "-unchecked"),
     pomIncludeRepository := { x => false },

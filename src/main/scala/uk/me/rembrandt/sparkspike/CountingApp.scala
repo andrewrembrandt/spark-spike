@@ -1,5 +1,6 @@
-package uk.me.rembrandt.holdenksprktmpl
+package uk.me.rembrandt.sparkspike
 
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -9,11 +10,13 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object CountingLocalApp extends App{
   val (inputFile, outputFile) = (args(0), args(1))
-  val conf = new SparkConf()
-    .setMaster("local")
-    .setAppName("my awesome app")
+  val session = SparkSession
+    .builder()
+    .master("local")
+    .appName("SparkSpike")
+    .getOrCreate()
 
-  Runner.run(conf, inputFile, outputFile)
+  Runner.run(session, inputFile, outputFile)
 }
 
 /**
@@ -23,12 +26,14 @@ object CountingApp extends App{
   val (inputFile, outputFile) = (args(0), args(1))
 
   // spark-submit command should supply all necessary config elements
-  Runner.run(new SparkConf(), inputFile, outputFile)
+  val session = SparkSession.builder().getOrCreate()
+  Runner.run(session, inputFile, outputFile)
 }
 
 object Runner {
-  def run(conf: SparkConf, inputFile: String, outputFile: String): Unit = {
-    val sc = new SparkContext(conf)
+  def run(session: SparkSession, inputFile: String, outputFile: String): Unit = {
+    val sc = session.sparkContext
+
     val rdd = sc.textFile(inputFile)
     val counts = WordCount.withStopWordsFiltered(rdd)
     counts.saveAsTextFile(outputFile)
